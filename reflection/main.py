@@ -1,5 +1,6 @@
 """Reflection 桌面应用入口。启动本地服务器，自动打开浏览器。"""
 import sys
+import logging
 import webbrowser
 import threading
 import time
@@ -11,9 +12,11 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from reflection.server import app
 from reflection.config import ensure_data_dir, load_config
 
-
 HOST = "127.0.0.1"
 PORT = 18080
+
+# 先设好基础日志，避免 uvicorn 在无终端模式下崩溃
+logging.basicConfig(level=logging.WARNING, format="%(message)s")
 
 
 def open_browser():
@@ -23,16 +26,12 @@ def open_browser():
 
 def main():
     ensure_data_dir()
-    cfg = load_config()
-
-    print(f"  Reflection · 反观 v0.1.0")
-    print(f"  数据目录: {cfg.model_dump()}")
-    print(f"  打开 http://{HOST}:{PORT}")
-    print()
+    load_config()
 
     threading.Thread(target=open_browser, daemon=True).start()
 
-    uvicorn.run(app, host=HOST, port=PORT, log_level="warning")
+    # log_config=None 让 uvicorn 使用我们预先配好的 logging
+    uvicorn.run(app, host=HOST, port=PORT, log_config=None)
 
 
 if __name__ == "__main__":
