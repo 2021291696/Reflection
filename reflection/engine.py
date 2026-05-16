@@ -2,6 +2,7 @@
 import json
 from .database import get_db, SessionModel, InsightModel, PatternModel
 from .llm_client import chat
+from .config import load_config
 
 
 # ── 系统提示词 ─────────────────────────────
@@ -58,6 +59,12 @@ def start_session(tag: str | None = None) -> tuple[int, str]:
 
 def send_message(session_id: int, user_message: str) -> str:
     """在现有 session 中发送用户消息，返回 AI 回复。自动推进三轮。"""
+    cfg = load_config()
+    if not cfg.api_key:
+        return ("还没有设置 API Key。\n\n"
+                "点右上角那扇小门，在设置里填入你的 DeepSeek API Key，"
+                "然后回来，我就会接住你。")
+
     db = get_db()
     session = db.query(SessionModel).filter_by(id=session_id).first()
     if not session:
