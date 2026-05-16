@@ -1,5 +1,12 @@
 # Reflection · 反观
 
+<p align="center">
+  <img src="https://img.shields.io/badge/version-0.1.0-9b8970" alt="version">
+  <img src="https://img.shields.io/badge/platform-Windows-9b8970" alt="platform">
+  <img src="https://img.shields.io/badge/license-MIT-9b8970" alt="license">
+  <img src="https://img.shields.io/badge/data-local--first-9b8970" alt="data">
+</p>
+
 > 一间安静的屋子，坐在高处，俯瞰自己的内心。
 
 ---
