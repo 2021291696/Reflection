@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史 · Reflection</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body { overflow-y: auto; }
+    .history-container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 60px 32px 80px;
+    }
+    .history-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .back-link {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 14px;
+      font-family: var(--font-sans);
+      font-weight: 300;
+      transition: color 0.3s;
+    }
+    .back-link:hover { color: var(--gold); }
+    .history-title {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
+    .history-section {
+      margin-bottom: 48px;
+    }
+    .history-section h3 {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    .session-card {
+      padding: 24px 0;
+      border-bottom: 0.5px solid rgba(200, 170, 130, 0.1);
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    .session-card:hover { opacity: 0.8; }
+    .session-date {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .session-preview {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    .session-tag {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      margin-top: 8px;
+    }
+    .pattern-card {
+      padding: 20px 0;
+      border-bottom: 0.5px solid rgba(200, 170, 130, 0.1);
+    }
+    .pattern-type {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .pattern-desc {
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+    .pattern-trend {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 0;
+      color: var(--text-dim);
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-style: italic;
+    }
+    /* 详情视图 */
+    #detail-view {
+      display: none;
+    }
+    #detail-view.active {
+      display: block;
+    }
+    #list-view.hidden {
+      display: none;
+    }
+    .detail-message {
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+    .detail-message.user {
+      font-family: var(--font-sans);
+      font-weight: 300;
+    }
+    .detail-message.assistant {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: rgba(225, 215, 195, 0.72);
+    }
+    .insight-item {
+      padding: 12px 0;
+      border-bottom: 0.5px solid rgba(200, 170, 130, 0.08);
+    }
+    .insight-dim {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .insight-content {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="history-container">
+    <div id="list-view">
+      <div class="history-header">
+        <a class="back-link" href="/">&larr; 回 去</a>
+        <span class="history-title">曾经走过的路</span>
+      </div>
+
+      <div class="history-section">
+        <h3>复盘记录</h3>
+        <div id="sessions-list"></div>
+      </div>
+
+      <div class="history-section">
+        <h3>反复出现的模式</h3>
+        <div id="patterns-list"></div>
+      </div>
+
+      <div class="history-section">
+        <h3>设置</h3>
+        <div id="settings-form" style="margin-top:16px;">
+          <label style="display:block;margin-bottom:12px;">
+            <span style="font-size:10px;letter-spacing:3px;color:var(--text-dim);">API 提供商</span>
+            <select id="cfg-provider" style="display:block;width:100%;margin-top:4px;padding:8px;background:transparent;border:0.5px solid rgba(200,170,130,0.2);color:var(--text-primary);font-family:var(--font-sans);font-size:13px;">
+              <option value="deepseek">DeepSeek</option>
+              <option value="openai">OpenAI</option>
+              <option value="anthropic">Anthropic</option>
+            </select>
+          </label>
+          <label style="display:block;margin-bottom:12px;">
+            <span style="font-size:10px;letter-spacing:3px;color:var(--text-dim);">API Key</span>
+            <input id="cfg-key" type="password" placeholder="sk-..." style="display:block;width:100%;margin-top:4px;padding:8px;background:transparent;border:0.5px solid rgba(200,170,130,0.2);color:var(--text-primary);font-family:var(--font-sans);font-size:13px;">
+          </label>
+          <label style="display:block;margin-bottom:12px;">
+            <span style="font-size:10px;letter-spacing:3px;color:var(--text-dim);">模型</span>
+            <input id="cfg-model" type="text" placeholder="gpt-4o" style="display:block;width:100%;margin-top:4px;padding:8px;background:transparent;border:0.5px solid rgba(200,170,130,0.2);color:var(--text-primary);font-family:var(--font-sans);font-size:13px;">
+          </label>
+          <button id="cfg-save" style="margin-top:12px;padding:8px 24px;background:transparent;border:0.5px solid rgba(200,170,130,0.3);color:var(--text-primary);font-family:var(--font-sans);font-size:12px;font-weight:300;letter-spacing:3px;cursor:pointer;transition:border-color 0.3s;">保 存</button>
+        <button id="btn-quit" style="margin-top:32px;padding:8px 24px;background:transparent;border:0.5px solid rgba(220,120,100,0.3);color:rgba(220,160,140,0.6);font-family:var(--font-sans);font-size:11px;font-weight:300;letter-spacing:3px;cursor:pointer;transition:all 0.3s;">退 出 应 用</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 单次复盘详情 -->
+    <div id="detail-view">
+      <div class="history-header">
+        <a class="back-link" href="/history">&larr; 返 回</a>
+        <span class="history-title" id="detail-date"></span>
+      </div>
+      <div id="detail-conversation" class="history-section"></div>
+      <div id="detail-insights" class="history-section">
+        <h3>洞察提炼</h3>
+      </div>
+      <div id="detail-takeaway" class="history-section" style="display:none;">
+        <h3>带走的一句话</h3>
+        <p style="font-family:var(--font-serif);font-size:18px;font-style:italic;line-height:1.8;" id="takeaway-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const detailId = urlParams.get('id');
+
+    if (detailId) {
+      showDetailView(parseInt(detailId));
+    } else {
+      loadHistory();
+    }
+    loadConfig();
+
+    function showDetailView(id) {
+      document.getElementById('list-view').classList.add('hidden');
+      document.getElementById('detail-view').classList.add('active');
+      fetch(`/api/sessions/${id}`)
+        .then(r => r.json())
+        .then(s => renderDetail(s))
+        .catch(() => {
+          document.getElementById('detail-conversation').innerHTML =
+            '<div class="empty-state">加载失败</div>';
+        });
+    }
+
+    function renderDetail(session) {
+      document.getElementById('detail-date').textContent =
+        new Date(session.created_at).toLocaleDateString('zh-CN', {
+          year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
+        });
+
+      const convEl = document.getElementById('detail-conversation');
+      convEl.innerHTML = session.conversation.map(m =>
+        `<div class="detail-message ${m.role}">${escapeHtml(m.content)}</div>`
+      ).join('');
+
+      const insightsEl = document.getElementById('detail-insights');
+      if (session.insights.length > 0) {
+        insightsEl.innerHTML += session.insights.map(i =>
+          `<div class="insight-item">
+            <div class="insight-dim">${dimLabel(i.dimension)}</div>
+            <div class="insight-content">${escapeHtml(i.content)}</div>
+          </div>`
+        ).join('');
+      }
+
+      if (session.takeaway) {
+        document.getElementById('detail-takeaway').style.display = 'block';
+        document.getElementById('takeaway-text').textContent = session.takeaway;
+      }
+    }
+
+    function dimLabel(dim) {
+      return dim === 'thought' ? '念头' : dim === 'state' ? '内在状态' : '道的体悟';
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    async function loadHistory() {
+      const sResp = await fetch('/api/sessions');
+      const sessions = await sResp.json();
+      const sList = document.getElementById('sessions-list');
+      if (sessions.length === 0) {
+        sList.innerHTML = '<div class="empty-state">还没有复盘记录<br>回去写第一次吧</div>';
+      } else {
+        sList.innerHTML = sessions.map(s => `
+          <div class="session-card" onclick="viewSession(${s.id})">
+            <div class="session-date">${new Date(s.created_at).toLocaleDateString('zh-CN', {year:'numeric',month:'long',day:'numeric',weekday:'long'})}</div>
+            <div class="session-preview">${escapeHtml(s.takeaway || '查看完整对话...')}</div>
+            ${s.tag ? `<div class="session-tag">${escapeHtml(s.tag)}</div>` : ''}
+          </div>`).join('');
+      }
+
+      const pResp = await fetch('/api/patterns');
+      const patterns = await pResp.json();
+      const pList = document.getElementById('patterns-list');
+      if (patterns.length === 0) {
+        pList.innerHTML = '<div class="empty-state">复盘多了<br>模式会自然浮现</div>';
+      } else {
+        pList.innerHTML = patterns.map(p => `
+          <div class="pattern-card">
+            <div class="pattern-type">${escapeHtml(p.type)}</div>
+            <div class="pattern-desc">${escapeHtml(p.description)}</div>
+            <div class="pattern-trend">首次：${new Date(p.first_seen).toLocaleDateString('zh-CN')} · 趋势：${p.trend === 'strengthening' ? '强化中' : p.trend === 'weakening' ? '减弱中' : '稳定'}</div>
+          </div>`).join('');
+      }
+    }
+
+    async function loadConfig() {
+      const resp = await fetch('/api/config');
+      const cfg = await resp.json();
+      document.getElementById('cfg-provider').value = cfg.api_provider;
+      document.getElementById('cfg-model').value = cfg.model;
+      if (cfg.has_key) document.getElementById('cfg-key').placeholder = '已设置 (不修改则留空)';
+    }
+
+    document.getElementById('cfg-save').addEventListener('click', async () => {
+      const body = {
+        api_provider: document.getElementById('cfg-provider').value,
+        model: document.getElementById('cfg-model').value,
+      };
+      const key = document.getElementById('cfg-key').value.trim();
+      if (key) body.api_key = key;
+      await fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      document.getElementById('cfg-key').value = '';
+      document.getElementById('cfg-key').placeholder = '已保存';
+    });
+
+    function viewSession(id) {
+      window.location.href = `/history?id=${id}`;
+    }
+
+    document.getElementById('btn-quit').addEventListener('click', async () => {
+      await fetch('/api/shutdown', { method: 'POST' });
+      document.body.innerHTML = '<div class="empty-state" style="padding-top:40vh;">已退出，关闭此窗口即可。</div>';
+    });
+  </script>
+</body>
+</html>

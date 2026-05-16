@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+
+# 测试
+.pytest_cache/
+
+# 构建
+build/
+dist/
+*.spec
+
+# 分发（二进制，不入库）
+*.exe
+*.zip
+
+# 环境
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/

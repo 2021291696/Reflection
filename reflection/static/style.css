@@ -1,0 +1,279 @@
+/* === Reset & Base === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-top: #0f1f35;
+  --bg-mid: #18283e;
+  --bg-low: #2a3a3c;
+  --bg-bottom: #4e3e2c;
+  --text-primary: rgba(225, 215, 195, 0.82);
+  --text-secondary: rgba(200, 170, 130, 0.55);
+  --text-dim: rgba(190, 175, 145, 0.4);
+  --gold: rgba(230, 190, 140, 0.5);
+  --gold-bright: rgba(250, 200, 120, 0.55);
+  --door-border: rgba(210, 180, 135, 0.5);
+  --font-serif: Georgia, 'Noto Serif SC', 'STSong', 'SimSun', serif;
+  --font-sans: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Inter', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  color: var(--text-primary);
+  background: linear-gradient(180deg,
+    var(--bg-top) 0%,
+    var(--bg-mid) 30%,
+    #1e3045 55%,
+    var(--bg-low) 72%,
+    #3e3a2e 85%,
+    var(--bg-bottom) 100%
+  );
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === 首页布局 === */
+#main-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  padding: 40px 32px;
+}
+
+/* 左上角英文 */
+.brand {
+  position: absolute;
+  top: 22px;
+  left: 28px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 5px;
+  color: var(--text-dim);
+  user-select: none;
+}
+
+/* 右上角门图标 */
+.door-icon {
+  position: absolute;
+  top: 22px;
+  right: 28px;
+  width: 14px;
+  height: 17px;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+.door-icon:hover { opacity: 1; }
+
+.door-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* 中央文字区 */
+.hero-text {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-align: center;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.divider {
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  margin: 22px auto 14px;
+}
+
+.subtitle-text {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  color: var(--text-secondary);
+}
+
+/* 底部光晕 */
+.sunrise-glow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: linear-gradient(0deg,
+    rgba(240, 180, 80, 0.15) 0%,
+    rgba(210, 150, 60, 0.08) 30%,
+    rgba(170, 120, 40, 0.02) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.horizon-line {
+  position: absolute;
+  bottom: 8px;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(250, 200, 120, 0.35),
+    var(--gold-bright),
+    rgba(250, 200, 120, 0.35),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* === 对话区 === */
+#conversation {
+  width: 100%;
+  max-width: 600px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 0;
+  margin-bottom: 16px;
+  scroll-behavior: smooth;
+}
+
+.message {
+  margin-bottom: 20px;
+  animation: fadeIn 0.6s ease;
+}
+
+.message.user {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.message.assistant {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: rgba(225, 215, 195, 0.72);
+  line-height: 1.8;
+}
+
+/* 输入区 */
+#input-area {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+}
+
+#user-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(200, 170, 130, 0.2);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.8;
+  padding: 12px 0;
+  outline: none;
+  resize: none;
+  transition: border-color 0.3s ease;
+}
+
+#user-input:focus {
+  border-bottom-color: rgba(230, 190, 140, 0.5);
+}
+
+#user-input::placeholder {
+  color: rgba(180, 160, 130, 0.35);
+}
+
+/* 发送按钮 */
+#send-btn {
+  position: absolute;
+  right: 0;
+  bottom: 14px;
+  background: none;
+  border: none;
+  color: rgba(200, 170, 130, 0.5);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  transition: color 0.3s ease;
+  display: none;
+}
+
+#send-btn.visible { display: block; }
+#send-btn:hover { color: rgba(240, 200, 140, 0.8); }
+
+/* 加载动画 */
+.typing-indicator {
+  display: flex;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.typing-indicator span {
+  width: 4px;
+  height: 4px;
+  background: rgba(200, 170, 130, 0.5);
+  border-radius: 50%;
+  animation: blink 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0%, 60%, 100% { opacity: 0.3; }
+  30% { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === 新复盘按钮 === */
+#new-session-btn {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+#new-session-btn.visible {
+  opacity: 0.6;
+  pointer-events: auto;
+}
+
+#new-session-btn:hover { opacity: 1; }
+
+/* === 滚动条 === */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(200, 170, 130, 0.15); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(200, 170, 130, 0.3); }
+
+/* 响应式 */
+@media (max-width: 480px) {
+  .hero-text { font-size: 22px; }
+  #conversation, #input-area { max-width: 100%; }
+}

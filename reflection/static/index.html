@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reflection · 反观</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div id="main-view">
+    <!-- 左上角英文 -->
+    <div class="brand">R E F L E C T I O N</div>
+
+    <!-- 右上角门图标 -->
+    <a class="door-icon" href="/history" title="曾经走过的路">
+      <svg viewBox="0 0 14 17" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.5" y="0.5" width="13" height="16" rx="1.5"
+              fill="none" stroke="rgba(210,180,135,0.5)" stroke-width="0.5"/>
+        <rect x="0" y="0" width="8" height="17" rx="1.5"
+              fill="rgba(15,24,38,0.7)"/>
+        <line x1="8" y1="0" x2="8" y2="17"
+              stroke="rgba(210,180,135,0.3)" stroke-width="0.5"/>
+        <line x1="2" y1="8.5" x2="7" y2="8.5"
+              stroke="rgba(240,200,140,0.4)" stroke-width="0.5"/>
+      </svg>
+    </a>
+
+    <!-- 对话区 -->
+    <div id="conversation"></div>
+
+    <!-- 输入区 -->
+    <div id="input-area">
+      <textarea id="user-input" rows="1" placeholder="开始写..."></textarea>
+      <button id="send-btn" title="发送">&#8593;</button>
+    </div>
+
+    <!-- 新复盘按钮 -->
+    <button id="new-session-btn">新 复 盘</button>
+
+    <!-- 底部光晕 -->
+    <div class="sunrise-glow"></div>
+    <div class="horizon-line"></div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
