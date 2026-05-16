@@ -18,6 +18,9 @@ dist/
 venv/
 .venv/
 
+# 测试验证
+检验/
+
 # IDE
 .idea/
 .vscode/
