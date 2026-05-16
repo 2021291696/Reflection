@@ -62,8 +62,8 @@ def send_message(session_id: int, user_message: str) -> str:
     cfg = load_config()
     if not cfg.api_key:
         return ("还没有设置 API Key。\n\n"
-                "点右上角那扇小门，在设置里填入你的 DeepSeek API Key，"
-                "然后回来，我就会接住你。")
+                "点右上角那扇小门，在设置里填入你的 API Key，"
+                "然后回到这里，开始复盘。")
 
     db = get_db()
     session = db.query(SessionModel).filter_by(id=session_id).first()
