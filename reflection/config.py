@@ -14,7 +14,7 @@ class Config(BaseModel):
     model: str = "deepseek-chat"
     api_base: str = ""                 # 自定义 API 地址（可选）
     theme: str = "dark"                # dark / light
-    first_run: bool = True
+    first_run: bool = False
 
 
 def ensure_data_dir() -> None:

@@ -89,16 +89,39 @@ def api_get_patterns():
     return get_patterns()
 
 
+@app.get("/api/health")
+def api_health():
+    from .config import load_config
+    cfg = load_config()
+    return {
+        "status": "ok",
+        "version": "0.1.0",
+        "has_api_key": bool(cfg.api_key),
+    }
+
+
 # ── 静态文件 ─────────────────────────────
 
-@app.get("/")
+from fastapi.responses import HTMLResponse
+
+
+def _no_cache(resp):
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+
+@app.get("/", response_class=HTMLResponse)
 def serve_index():
-    return FileResponse(STATIC_DIR / "index.html")
+    r = FileResponse(STATIC_DIR / "index.html")
+    return _no_cache(r)
 
 
-@app.get("/history")
+@app.get("/history", response_class=HTMLResponse)
 def serve_history():
-    return FileResponse(STATIC_DIR / "history.html")
+    r = FileResponse(STATIC_DIR / "history.html")
+    return _no_cache(r)
 
 
 @app.post("/api/shutdown")
