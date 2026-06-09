@@ -1,129 +1,64 @@
-# Reflection · 反观
+<!-- BADGE BAR -->
+[![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green)](https://fastapi.tiangolo.com)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/version-0.1.0-9b8970" alt="version">
-  <img src="https://img.shields.io/badge/platform-Windows-9b8970" alt="platform">
-  <img src="https://img.shields.io/badge/license-MIT-9b8970" alt="license">
-  <img src="https://img.shields.io/badge/data-local--first-9b8970" alt="data">
-</p>
+# Reflection
 
-> 一间安静的屋子，坐在高处，俯瞰自己的内心。
+> **一间安静的屋子，坐在高处，俯瞰自己的内心。** 桌面复盘应用。侧重心境、念头、道的层面——不是"今天做了什么"，而是"我为什么这样想"。
 
----
-
-## 这是什么
-
-Reflection 是一个**复盘 Agent 桌面应用**。不局限于交易——生活、学习、关系、工作，所有的经历都可以在这里复盘。
-
-它侧重的不是"下次怎么做更好"，而是**心境、念头、道的层面**——你当时怎么想的、身体什么感觉、这件事在告诉你什么规律。
-
-**它是一面镜子，不是一个导师。** 不评判、不建议、不分析。只是接住你，帮你看见自己。
+[English](#english)
 
 ---
 
-## 为什么要做这个
+## 为什么需要 Reflection？
 
-大多数复盘工具关心的是"效率"——怎么做得更快、更好、更对。但很多人的困扰不在行为层面，在**内心**。
+- **所有的效率工具都在帮你"做更多"，没有一个帮你"想更清"。** 任务列表越来越长，但你真的知道自己在往哪个方向走吗？
+- **复盘不只是回顾事件，是观察思维模式。** "今天的 bug 是因为 X"是事件复盘。"我为什么总是在赶工前才认真"是模式复盘。Reflection 做的是第二种。
+- **AI 可以帮你反思，而不是帮你忙。** 用 Agent 做内心对话——不是 ChatGPT 给你建议，是一个温和的观察者帮你梳理自己的想法。
 
-做完一件事，心里堵着说不清的东西。反复出现的情绪，不知道为什么。知道很多道理，但身体不听。
+## 核心能力
 
-这些不是"效率工具"能解决的问题。需要的是一个**安静的空间**，有人在旁边听着，轻轻问一句：那时候，你心里第一句是什么？
+- 🪞 **心境追踪** — 记录情绪、念头、状态变化，不是日记而是数据
+- 🧵 **模式发现** — 跨时间的思维模式识别
+- 🤖 **Agent 引导复盘** — DeepSeek 驱动的对话式复盘，不评判、不催促
+- 💻 **桌面应用** — FastAPI + 本地优先，数据属于你自己
 
-Reflection 就是这个空间。
+## 设计哲学
 
----
+**效率工具让你跑得更快，反思工具让你确认方向是对的。** 这是整个 GitHub Profile 里唯一一个不面向"做更多"的项目。不是巧合——是故意的。
 
-## 设计理念
+**最好的观察是不干涉。** 这个应用里的 Agent 不做建议、不给方案。它只是帮你看见——看见自己的思维路径、看见重复的模式、看见被忽略的感受。
 
-### 天际线美学
-
-打开应用，你看到的不是菜单和按钮，是一道深蓝渐变成暖金的地平线——像站在摩天楼顶看黎明前城市天际线。复盘不是钻进心里，是退后一步，在高处看自己。
-
-### 三轮对话
-
-没有进度条，没有轮次编号。三轮是你的心理节奏，不是界面结构：
-
-- **第一轮 · 倾倒** — 你倾诉，它接住。不追问，最后轻轻回响一句"我听到的是……对吗？"
-- **第二轮 · 觉察** — 它从三个维度问一个问题，每次只问一个：念头（你心里第一句是什么）、身体（能量往上还是往下）、隐喻（这件事在告诉你什么）
-- **第三轮 · 沉淀** — 它提炼洞察，标注维度，最后问："今天最值得带走的一句话是什么？"
-
-### 一扇小门
-
-右上角有一个极小的门图标。点开是"曾经走过的路"——所有复盘记录、AI 发现的长期模式。平时不打扰你，想看的时候推开就行。
-
----
-
-## 安装使用
-
-### 普通用户
-
-1. 下载 `Reflection-Setup.zip` 解压
-2. 双击 `安装.vbs`（静默，完成后弹窗确认）
-3. 桌面双击 `Reflection` → 浏览器自动打开
-4. 点右上角小门 → 填 API Key（支持 DeepSeek / OpenAI / Anthropic）
-5. 回到首页，开始
-
-### 开发者
-
-```powershell
-cd reflection
-pip install -r requirements.txt
-python -m reflection.main
-```
-
-浏览器打开 `http://127.0.0.1:18080`。
-
-```powershell
-# 运行测试
-pytest reflection/tests/ -v
-
-# 打包 .exe
-pyinstaller --windowed --onefile --name Reflection reflection/main.py
-```
-
----
+**本地优先。** 你的内心对话不需要上云。数据存储在本地，你完全拥有。
 
 ## 技术栈
 
-| 层 | 技术 |
-|----|------|
-| 后端 | Python 3.11+ / FastAPI |
-| 数据库 | SQLite（通过 SQLAlchemy） |
-| 前端 | 纯 HTML/CSS/JS（无框架） |
-| AI | 用户自带 API Key，直调 DeepSeek/OpenAI/Anthropic |
-| 打包 | PyInstaller --windowed |
-| 安装 | VBScript 静默安装 |
-
-**数据完全本地，不上传任何内容。**
-
----
-
-## 架构
-
-```
-Reflection.exe (--windowed, 无终端)
-    │
-    ├─→ uvicorn 启动 FastAPI (127.0.0.1:18080)
-    │       ├─ /api/sessions       复盘会话
-    │       ├─ /api/config         配置管理
-    │       ├─ /api/patterns       长期模式
-    │       ├─ /api/health         健康检查
-    │       └─ /                   静态首页
-    │
-    └─→ 浏览器自动打开
-```
-
----
-
-## 不做什么
-
-- 不评判、不建议、不分析——只做镜子
-- 不上传数据到任何服务器
-- 不做社交分享、导出 PDF
-- 首版仅桌面端
-
----
+- **后端:** Python · FastAPI
+- **AI:** DeepSeek API
+- **前端:** 桌面原生
+- **数据:** SQLite（本地）
 
 ## License
 
 MIT
+
+---
+
+## English
+
+# Reflection
+
+> **A quiet room, sitting above, overlooking your own mind.** Desktop reflection app. Not about "what did I do today" — about "why do I think this way."
+
+### Why?
+
+Every productivity tool helps you do more. None helps you think clearer. Reflection is the counterbalance — an AI-guided introspection tool that helps you see your own thinking patterns without judgment.
+
+### Design Philosophy
+
+**Productivity tools make you run faster. Reflection tools confirm you're running in the right direction.** This is the only project in this GitHub profile that isn't about "doing more." That's intentional.
+
+**The best observation is non-interfering.** The agent in this app doesn't give advice or solutions. It helps you see — your thinking paths, recurring patterns, overlooked feelings.
+
+**Local-first.** Your inner dialogue doesn't need the cloud.
